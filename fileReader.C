@@ -3,9 +3,10 @@
 // To compile and run this macro, follow these steps:
 //  0. enable ROOT 6
 //  1. make sure that this macro, and files "fil.cpp", "fil.h", "tre.cpp" and "tre.h" which define EPOS TTree structure, are in the same directory
-//  2. adapt the 4 lines below which define variables: "inputData", "maxNoFiles", "maxNoEventsPerFile", "checkForCorruptedFiles" and "verbose"
-//  3. implement your analysis code at placeholder '// YOUR ANALYSIS CODE HERE ' below 
-//  4. compile and run with: root -l fileReader.C++
+//  2. adapt the 5 lines below which define variables: "inputData", "maxNoFiles", "maxNoEventsPerFile", "checkForCorruptedFiles" and "verbose"
+//  3. implement your declarations (histograms, etc.) below at placeholder '// YOUR DECLARATIONS HERE'
+//  4. implement your analysis code below at placeholder '// YOUR ANALYSIS CODE HERE' 
+//  5. compile and run with: root fileReader.C++
 
 #include "Riostream.h"
 #include "stdio.h"
@@ -32,6 +33,10 @@ void Green(const char* text);
 void Yellow(const char* text);
 void Blue(const char* text);
 
+
+// YOUR DECLARATIONS HERE
+
+
 // Main:
 Int_t fileReader()
 {
@@ -39,7 +44,8 @@ Int_t fileReader()
 
  // Welcome message:
  Green("=> Welcome to fileReader.C, v2.0.0 !");
- TStopwatch timer; timer.Start();
+ TStopwatch timer; timer.Start(); // this stopwatch measures the total execution time for all files
+ TStopwatch timerFile; // this stopwatch measures the execution time per file
 
  // Calculate the total number of files:
  Int_t nFiles = NumberOfNonEmptyLines(inputData.Data()); 
@@ -65,6 +71,7 @@ Int_t fileReader()
   if(TString(line).EqualTo("")){continue;}
 
   cout<<Form("\nProcessing file %s .... (%d/%d)",line.data(),fileCounter+1,nFiles)<<endl;
+  timerFile.Reset(); timerFile.Start();
 
   // Optional additional checks for corrupted files:
   if(checkForCorruptedFiles)
@@ -105,7 +112,7 @@ Int_t fileReader()
   // Okay, we have a healthy file to process:
   fileCounter++;
   fileCounterHealthy++;     
-
+ 
   // EPOS TTree structure:
   Eptree *eposttree = new Eptree(200000);
   
@@ -211,14 +218,15 @@ Int_t fileReader()
    } // for(Int_t p=0;p<nParticles;p++)
   } // for(Int_t e=0;e<nEvts;e++)
 
-  timer.Print(); timer.Continue();
+  cout<<"Processing time only of the last file ... "; timerFile.Print();
+  cout<<"Total processing time for all files ..... "; timer.Print(); timer.Continue();
 
   delete eposttree;
 
  } // while(getline(myfile,line))
 
  Green("=> Hasta la vista!");
- timer.Print();
+ cout<<"Total processing time for all files ..... "; timer.Print();
 
  return 0;
 
