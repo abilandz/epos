@@ -15,7 +15,10 @@ git checkout v2.0.0
 
 Currently available versions of ```fileReader.C```:
 
-* **v2.0.0** &mdash; Developed for large-scale EPOS 3.117 productions as of 2022, using ROOT 6. An ASCII file with the list of ROOT files containing EPOS events has to be provided.
+* **main** &mdash; This is the latest and greatest version, available in the "main" branch. All latest improvements and bug fixes are available in this version. 
+Tested successfully also for the latest EPOS 4.0.3 productions.
+
+* **v2.0.0** &mdash; Developed for large-scale EPOS 3.117 and EPOS 4.0.0 productions as of 2022, using ROOT 6. An ASCII file with the list of ROOT files containing EPOS events has to be provided.
 This macro then simply processes line-by-line that ASCII file. A list of ROOT files can be prepared by using 'find' command. The ROOT files on that list can be on 
 different /scratch disks. See the preamble of ```fileReader.C``` for further details (how to compile, run, extract EPOS variables, etc.)
 
