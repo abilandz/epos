@@ -1,4 +1,5 @@
-// v2.0.0
+// 'master' version: v2.0.0 + fix for memory corruption on 20250828
+//
 
 // To compile and run this macro, follow these steps:
 //  0. enable ROOT 6
@@ -114,7 +115,10 @@ Int_t fileReader()
   fileCounterHealthy++;     
  
   // EPOS TTree structure:
-  Eptree *eposttree = new Eptree(200000);
+  Eptree *eposttree = new Eptree(2000000);
+  // Increase this argument even further, if you get a 'glibc' error:
+  //   corrupted size vs. prev_size
+  //   Aborted
   
   // Accessing EPOS TTree from the example output file:
   InitTreeFile(strdup(line.data()),eposttree);
@@ -221,6 +225,7 @@ Int_t fileReader()
   cout<<"Processing time only of the last file ... "; timerFile.Print();
   cout<<"Total processing time for all files ..... "; timer.Print(); timer.Continue();
 
+  eposttree->fEposTreeFile->Close();
   delete eposttree;
 
  } // while(getline(myfile,line))
